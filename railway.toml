@@ -10,16 +10,30 @@ build = "Dockerfile"
 http = "8000"
 
 [service.variables]
+# Nomes usados pelo entrypoint.sh (com service references Railway)
 ADMIN_PASSWORD = "admin"
 SITE_NAME = "site1"
 SITE_DB_PREFIX = "heltclinica"
+
 MYSQL_HOST = "${{ mysql.RAILWAY_PRIVATE_DOMAIN }}"
 MYSQL_PORT = "3306"
 MYSQL_USER = "root"
 MYSQL_PASSWORD = "${{ mysql.MYSQL_ROOT_PASSWORD }}"
 MYSQL_DATABASE = "${{ mysql.MYSQL_DATABASE }}"
+
 REDIS_HOST = "${{ redis.RAILWAY_PRIVATE_DOMAIN }}"
 REDIS_PORT = "6379"
+
+# Variaveis compartilhadas (projeto) com nomes do .env apontando pros mesmos valores
+HOST_DB = "${{ mysql.RAILWAY_PRIVATE_DOMAIN }}"
+PORTA_DB = "3306"
+SENHA_ROOT_DB = "${{ mysql.MYSQL_ROOT_PASSWORD }}"
+Database = "${{ mysql.MYSQL_DATABASE }}"
+SENHA_ADMIN = "admin"
+NOME_SITE = "site1"
+PORTA_SOCKETIO = "9000"
+REDIS_CACHE = "${{ redis.RAILWAY_PRIVATE_DOMAIN }}:6379"
+REDIS_FILA = "${{ redis.RAILWAY_PRIVATE_DOMAIN }}:6379"
 
 [service.volumes]
 mount = "/home/frappe/frappe-bench/sites"
