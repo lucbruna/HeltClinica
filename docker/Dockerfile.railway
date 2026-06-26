@@ -4,7 +4,7 @@ USER root
 
 # Instalar ferramentas uteis
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    mysql-client \
+    default-mysql-client \
     redis-tools \
     && rm -rf /var/lib/apt/lists/*
 

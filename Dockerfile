@@ -4,7 +4,7 @@ FROM frappe/erpnext:${VERSAO_ERP}
 USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    mysql-client \
+    default-mysql-client \
     redis-tools \
     && rm -rf /var/lib/apt/lists/*
 
