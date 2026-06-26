@@ -3,6 +3,26 @@ name = "HeltClinica"
 description = "Sistema de gestao clinica baseado em ERPNext + Healthcare"
 
 [[service]]
+name = "mysql"
+image = "mysql:8.0"
+
+[service.variables]
+MYSQL_ROOT_PASSWORD = "heltclinica_root_pwd"
+MYSQL_DATABASE = "heltclinica_site1"
+
+[service.volumes]
+mount = "/var/lib/mysql"
+name = "mysql-data"
+
+[[service]]
+name = "redis"
+image = "redis:7-alpine"
+
+[service.volumes]
+mount = "/data"
+name = "redis-data"
+
+[[service]]
 name = "backend"
 build = "Dockerfile"
 
@@ -10,15 +30,16 @@ build = "Dockerfile"
 http = "8000"
 
 [service.variables]
-# Variaveis fixas do projeto
 ADMIN_PASSWORD = "admin"
 SITE_NAME = "site1"
 SITE_DB_PREFIX = "heltclinica"
-
-# Variaveis compartilhadas (nomes do .env)
-SENHA_ADMIN = "admin"
-NOME_SITE = "site1"
-PORTA_SOCKETIO = "9000"
+MYSQL_HOST = "${{ mysql.RAILWAY_PRIVATE_DOMAIN }}"
+MYSQL_PORT = "3306"
+MYSQL_USER = "root"
+MYSQL_PASSWORD = "${{ mysql.MYSQL_ROOT_PASSWORD }}"
+MYSQL_DATABASE = "${{ mysql.MYSQL_DATABASE }}"
+REDIS_HOST = "${{ redis.RAILWAY_PRIVATE_DOMAIN }}"
+REDIS_PORT = "6379"
 
 [service.volumes]
 mount = "/home/frappe/frappe-bench/sites"
