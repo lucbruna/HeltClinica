@@ -5,7 +5,6 @@ description = "Sistema de gestao clinica baseado em ERPNext + Healthcare"
 [[service]]
 name = "backend"
 build = "docker/Dockerfile.railway"
-entrypoint = "entrypoint.railway.sh"
 
 [service.ports]
 http = "8000"
@@ -13,33 +12,9 @@ http = "8000"
 [service.variables]
 ADMIN_PASSWORD = "admin"
 SITE_DB_PREFIX = "heltclinica"
-MYSQL_HOST = "${{ mysql.RAILWAY_PRIVATE_DOMAIN }}"
-MYSQL_PORT = "${{ mysql.RAILWAY_TCP_PROXY_PORT }}"
-MYSQL_USER = "${{ mysql.MYSQL_USER }}"
-MYSQL_PASSWORD = "${{ mysql.MYSQL_PASSWORD }}"
-REDIS_HOST = "${{ redis.RAILWAY_PRIVATE_DOMAIN }}"
-REDIS_PORT = "${{ redis.RAILWAY_TCP_PROXY_PORT }}"
+SITE_NAME = "site1"
+BENCH_NETWORK = "railway"
 
 [service.volumes]
 mount = "/home/frappe/frappe-bench/sites"
 name = "sites-data"
-
-[[service]]
-name = "mysql"
-image = "mysql:8.0"
-
-[service.variables]
-MYSQL_ROOT_PASSWORD = "heltclinica_root_pwd"
-MYSQL_DATABASE = "heltclinica_site1"
-
-[service.volumes]
-mount = "/var/lib/mysql"
-name = "mysql-data"
-
-[[service]]
-name = "redis"
-image = "redis:7-alpine"
-
-[service.volumes]
-mount = "/data"
-name = "redis-data"
