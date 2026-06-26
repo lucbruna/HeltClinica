@@ -1,20 +1,3 @@
-[project]
-name = "HeltClinica"
-description = "Sistema de gestao clinica baseado em ERPNext + Healthcare"
-
-[[service]]
-name = "backend"
-build = "docker/Dockerfile.railway"
-
-[service.ports]
-http = "8000"
-
-[service.variables]
-ADMIN_PASSWORD = "admin"
-SITE_DB_PREFIX = "heltclinica"
-SITE_NAME = "site1"
-BENCH_NETWORK = "railway"
-
-[service.volumes]
-mount = "/home/frappe/frappe-bench/sites"
-name = "sites-data"
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "docker/Dockerfile.railway"
