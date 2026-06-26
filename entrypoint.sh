@@ -72,8 +72,6 @@ if [ ! -f "sites/$SITE/site_config.json" ]; then
   echo "Criando site $SITE com banco $DB_NAME..."
 
   bench new-site "$SITE" \
-    --mariadb-root-host "$DB_HOST" \
-    --mariadb-root-port "$DB_PORT" \
     --mariadb-root-username "$DB_USER" \
     --mariadb-root-password "$DB_PASS" \
     --admin-password "$ADMIN_PWD" \
