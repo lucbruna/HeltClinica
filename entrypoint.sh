@@ -2,9 +2,6 @@
 set -e
 
 echo "=== HeltClinica - Railway Entrypoint ==="
-echo "--- DEBUG: Environment variables ---"
-env | grep -E '^(MYSQL_|REDIS_|DB_|RAILWAY_)' | sort || true
-echo "--- FIM DEBUG ---"
 
 cd /home/frappe/frappe-bench
 
