@@ -23,10 +23,11 @@ DB_PASS="${MYSQL_PASSWORD:-admin}"
 DB_NAME="${MYSQL_DATABASE:-${SITE_DB_PREFIX:-heltclinica}_site1}"
 SITE="${SITE_NAME:-site1}"
 ADMIN_PWD="${ADMIN_PASSWORD:-admin}"
-# Extrair host:port da REDIS_URL (formato: redis://user:pass@host:port)
+# Extrair host:port:password da REDIS_URL (formato: redis://user:pass@host:port)
 if [ -n "$REDIS_URL" ]; then
   REDIS_HOST="${REDIS_HOST:-$(echo "$REDIS_URL" | sed -E 's|.*@([^:]+):.*|\1|')}"
   REDIS_PORT="${REDIS_PORT:-$(echo "$REDIS_URL" | sed -E 's|.*:([0-9]+)$|\1|')}"
+  REDIS_PASSWORD="${REDIS_PASSWORD:-${REDISPASSWORD:-$(echo "$REDIS_URL" | sed -E 's|redis://[^:]+:([^@]+)@.*|\1|')}}"
 fi
 REDIS_HOST="${REDIS_HOST:-redis}"
 REDIS_PORT="${REDIS_PORT:-6379}"
@@ -62,9 +63,14 @@ done
 echo "Configurando common_site_config.json..."
 bench set-config -g db_host "$DB_HOST"
 bench set-config -gp db_port "$DB_PORT"
-bench set-config -g redis_cache "redis://$REDIS_HOST:$REDIS_PORT"
-bench set-config -g redis_queue "redis://$REDIS_HOST:$REDIS_PORT"
-bench set-config -g redis_socketio "redis://$REDIS_HOST:$REDIS_PORT"
+if [ -n "$REDIS_PASSWORD" ]; then
+  REDIS_AUTH_STR="default:$REDIS_PASSWORD@"
+else
+  REDIS_AUTH_STR=""
+fi
+bench set-config -g redis_cache "redis://${REDIS_AUTH_STR}$REDIS_HOST:$REDIS_PORT"
+bench set-config -g redis_queue "redis://${REDIS_AUTH_STR}$REDIS_HOST:$REDIS_PORT"
+bench set-config -g redis_socketio "redis://${REDIS_AUTH_STR}$REDIS_HOST:$REDIS_PORT"
 bench set-config -gp socketio_port 9000
 bench set-config -g developer_mode 0
 
