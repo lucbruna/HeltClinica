@@ -78,12 +78,15 @@ bench set-config -g developer_mode 0
 if [ ! -f "sites/$SITE/site_config.json" ]; then
   echo "Criando site $SITE com banco $DB_NAME..."
 
+  # Limpar banco existente para evitar conflitos
+  mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASS" \
+    -e "DROP DATABASE IF EXISTS \`$DB_NAME\`; CREATE DATABASE \`$DB_NAME\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" 2>/dev/null || true
+
   bench new-site "$SITE" \
     --mariadb-root-username "$DB_USER" \
     --mariadb-root-password "$DB_PASS" \
     --admin-password "$ADMIN_PWD" \
-    --db-name "$DB_NAME" \
-    --force
+    --db-name "$DB_NAME"
 
   echo "Instalando ERPNext..."
   bench --site "$SITE" install-app erpnext
@@ -119,7 +122,7 @@ echo "Worker short/default iniciado (PID $!)"
 # Gunicorn (foreground)
 echo "Iniciando Gunicorn na porta ${PORT:-8000}..."
 cd /home/frappe/frappe-bench/sites
-exec gunicorn -b "0.0.0.0:${PORT:-8000}" \
+exec /home/frappe/frappe-bench/env/bin/gunicorn -b "0.0.0.0:${PORT:-8000}" \
   -w 2 \
   --threads 4 \
   --worker-class gthread \
