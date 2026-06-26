@@ -23,10 +23,10 @@ DB_PASS="${MYSQL_PASSWORD:-admin}"
 DB_NAME="${MYSQL_DATABASE:-${SITE_DB_PREFIX:-heltclinica}_site1}"
 SITE="${SITE_NAME:-site1}"
 ADMIN_PWD="${ADMIN_PASSWORD:-admin}"
-# Extrair host:port da REDIS_URL se estiver definida
+# Extrair host:port da REDIS_URL (formato: redis://user:pass@host:port)
 if [ -n "$REDIS_URL" ]; then
-  REDIS_HOST="${REDIS_HOST:-$(echo "$REDIS_URL" | sed -E 's|redis://([^:]+):.*|\1|')}"
-  REDIS_PORT="${REDIS_PORT:-$(echo "$REDIS_URL" | sed -E 's|redis://[^:]+:([0-9]+).*|\1|')}"
+  REDIS_HOST="${REDIS_HOST:-$(echo "$REDIS_URL" | sed -E 's|.*@([^:]+):.*|\1|')}"
+  REDIS_PORT="${REDIS_PORT:-$(echo "$REDIS_URL" | sed -E 's|.*:([0-9]+)$|\1|')}"
 fi
 REDIS_HOST="${REDIS_HOST:-redis}"
 REDIS_PORT="${REDIS_PORT:-6379}"
