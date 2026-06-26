@@ -1,0 +1,22 @@
+FROM frappe/erpnext:v15
+
+USER root
+
+# Instalar ferramentas uteis
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    mysql-client \
+    redis-tools \
+    && rm -rf /var/lib/apt/lists/*
+
+USER frappe
+
+# Instalar Healthcare
+RUN bench get-app healthcare https://github.com/earthians/marley --branch v15.1.20
+
+# Copiar entrypoint
+COPY entrypoint.railway.sh /home/frappe/entrypoint.railway.sh
+RUN chmod +x /home/frappe/entrypoint.railway.sh
+
+EXPOSE 8000
+
+ENTRYPOINT ["/home/frappe/entrypoint.railway.sh"]
