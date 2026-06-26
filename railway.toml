@@ -10,51 +10,16 @@ build = "Dockerfile"
 http = "8000"
 
 [service.variables]
-# Nomes usados pelo entrypoint.sh (com service references Railway)
+# Variaveis fixas do projeto
 ADMIN_PASSWORD = "admin"
 SITE_NAME = "site1"
 SITE_DB_PREFIX = "heltclinica"
 
-MYSQL_HOST = "${{ mysql.RAILWAY_PRIVATE_DOMAIN }}"
-MYSQL_PORT = "3306"
-MYSQL_USER = "root"
-MYSQL_PASSWORD = "${{ mysql.MYSQL_ROOT_PASSWORD }}"
-MYSQL_DATABASE = "${{ mysql.MYSQL_DATABASE }}"
-
-REDIS_HOST = "${{ redis.RAILWAY_PRIVATE_DOMAIN }}"
-REDIS_PORT = "6379"
-
-# Variaveis compartilhadas (projeto) com nomes do .env apontando pros mesmos valores
-HOST_DB = "${{ mysql.RAILWAY_PRIVATE_DOMAIN }}"
-PORTA_DB = "3306"
-SENHA_ROOT_DB = "${{ mysql.MYSQL_ROOT_PASSWORD }}"
-Database = "${{ mysql.MYSQL_DATABASE }}"
+# Variaveis compartilhadas (nomes do .env)
 SENHA_ADMIN = "admin"
 NOME_SITE = "site1"
 PORTA_SOCKETIO = "9000"
-REDIS_CACHE = "${{ redis.RAILWAY_PRIVATE_DOMAIN }}:6379"
-REDIS_FILA = "${{ redis.RAILWAY_PRIVATE_DOMAIN }}:6379"
 
 [service.volumes]
 mount = "/home/frappe/frappe-bench/sites"
 name = "sites-data"
-
-[[service]]
-name = "mysql"
-image = "mysql:8.0"
-
-[service.variables]
-MYSQL_ROOT_PASSWORD = "heltclinica_root_pwd"
-MYSQL_DATABASE = "heltclinica_site1"
-
-[service.volumes]
-mount = "/var/lib/mysql"
-name = "mysql-data"
-
-[[service]]
-name = "redis"
-image = "redis:7-alpine"
-
-[service.volumes]
-mount = "/data"
-name = "redis-data"
