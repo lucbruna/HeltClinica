@@ -5,6 +5,14 @@ echo "=== HeltClinica - Railway Entrypoint ==="
 
 cd /home/frappe/frappe-bench
 
+# Linkar assets (comportamento do entrypoint original)
+ASSETS_PATH="/home/frappe/frappe-bench/sites/assets"
+BAKED_PATH="/home/frappe/frappe-bench/assets"
+echo "Linkando assets..."
+rm -rf "$ASSETS_PATH"
+mkdir -p "$(dirname "$ASSETS_PATH")"
+ln -sf "$BAKED_PATH" "$ASSETS_PATH"
+
 # Resolver variaveis Railway
 # Railway MySQL addon fornece: MYSQL_URL, MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
 # Railway Redis addon fornece: REDIS_URL
