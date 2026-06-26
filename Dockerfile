@@ -12,7 +12,7 @@ USER frappe
 
 RUN bench get-app healthcare https://github.com/earthians/marley --branch v15.1.20
 
-COPY entrypoint.sh /home/frappe/entrypoint.sh
+COPY --chown=frappe:frappe entrypoint.sh /home/frappe/entrypoint.sh
 RUN chmod +x /home/frappe/entrypoint.sh
 
 ENTRYPOINT ["/home/frappe/entrypoint.sh"]
