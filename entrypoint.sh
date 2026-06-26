@@ -46,10 +46,11 @@ for i in $(seq 1 30); do
   sleep 3
 done
 
-# Aguardar Redis
+# Aguardar Redis (usar senha se disponivel)
+REDIS_PASS="${REDIS_PASSWORD:-${REDISPASSWORD:-}}"
 echo "Aguardando Redis..."
 for i in $(seq 1 20); do
-  if redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" ping 2>/dev/null | grep -q PONG; then
+  if redis-cli -h "$REDIS_HOST" -p "$REDIS_PORT" ${REDIS_PASS:+-a "$REDIS_PASS"} ping 2>/dev/null | grep -q PONG; then
     echo "Redis pronto!"
     break
   fi
@@ -75,7 +76,8 @@ if [ ! -f "sites/$SITE/site_config.json" ]; then
     --mariadb-root-username "$DB_USER" \
     --mariadb-root-password "$DB_PASS" \
     --admin-password "$ADMIN_PWD" \
-    --db-name "$DB_NAME"
+    --db-name "$DB_NAME" \
+    --force
 
   echo "Instalando ERPNext..."
   bench --site "$SITE" install-app erpnext
